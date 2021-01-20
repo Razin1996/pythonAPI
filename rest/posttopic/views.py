@@ -1,6 +1,9 @@
 from django.shortcuts import render
 from  django.http import  JsonResponse
 
+import paho.mqtt.client as paho
+import json
+
 # Create your views here.
 
 from rest_framework.decorators import api_view
@@ -48,8 +51,23 @@ def send_commandDetail(request,pk):
 def send_commandCreate(request):
     serializer=send_commandSerializers(data=request.data)
     if serializer.is_valid():
-        serializer.save()
-    return Response(serializer.data)
+        #serializer.save
+        return Response(serializer.data)
+        #return Response(serializer.data['topic'])
+
+        topic = json.dumps(serializer.data['topic'])
+        print(topic)
+        msg = json.dumps(serializer.data['message'])
+        broker="192.168.0.158"
+        port=1883
+        def on_publish(client,userdata,result):             #create function for callback
+            print("data published \n")
+            pass
+        client1= paho.Client("control1")                           #create client object
+        client1.on_publish = on_publish                          #assign function to callback
+        client1.connect(broker,port)                                 #establish connection
+        ret= client1.publish(topic,msg) 
+
 
 @api_view(['POST'])
 def send_commandUpdate(request,pk):
