@@ -52,7 +52,7 @@ def send_commandCreate(request):
     serializer=send_commandSerializers(data=request.data)
     if serializer.is_valid():
         #serializer.save
-        return Response(serializer.data)
+
         #return Response(serializer.data['topic'])
 
         topic = json.dumps(serializer.data['topic'])
@@ -66,7 +66,8 @@ def send_commandCreate(request):
         client1= paho.Client("control1")                           #create client object
         client1.on_publish = on_publish                          #assign function to callback
         client1.connect(broker,port)                                 #establish connection
-        ret= client1.publish(topic,msg) 
+        ret= client1.publish(topic,msg)
+        return Response(serializer.data)
 
 
 @api_view(['POST'])
