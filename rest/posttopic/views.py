@@ -55,10 +55,10 @@ def send_commandCreate(request):
 
         #return Response(serializer.data['topic'])
 
-        topic = json.dumps(serializer.data['topic'])
-        print(topic)
-        msg = json.dumps(serializer.data['message'])
-        broker="192.168.0.158"
+        topic = serializer.data['topic']
+        msg = str(serializer.data)
+        print(msg)
+        broker="103.98.206.92"
         port=1883
         def on_publish(client,userdata,result):             #create function for callback
             print("data published \n")
@@ -66,7 +66,7 @@ def send_commandCreate(request):
         client1= paho.Client("control1")                           #create client object
         client1.on_publish = on_publish                          #assign function to callback
         client1.connect(broker,port)                                 #establish connection
-        ret= client1.publish(topic,msg)
+        ret= client1.publish(topic,msg) 
         return Response(serializer.data)
 
 
