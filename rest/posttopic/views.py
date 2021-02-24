@@ -47,6 +47,7 @@ def send_commandDetail(request,pk):
     serializer=send_commandSerializers(commandList,many=False)
     return Response(serializer.data)
 
+
 @api_view(['POST'])
 def send_commandCreate(request):
     serializer=send_commandSerializers(data=request.data)
@@ -58,7 +59,7 @@ def send_commandCreate(request):
         topic = serializer.data['topic']
         msg = str(serializer.data)
         print(msg)
-        broker="103.98.206.92"
+        broker="mqtt.natai.cloud"
         port=1883
         def on_publish(client,userdata,result):             #create function for callback
             print("data published \n")
